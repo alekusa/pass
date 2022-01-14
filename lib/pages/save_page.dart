@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:pass/db/conect.dart';
+import 'package:pass/models/datos.dart';
 
 class SavePage extends StatelessWidget {
   const SavePage({Key? key}) : super(key: key);
@@ -8,7 +12,7 @@ class SavePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crear'),
+        title: const Text("Crear NUEVO Usuario/Clave"),
       ),
       body: Container(
         child: _FormSave(),
@@ -18,34 +22,64 @@ class SavePage extends StatelessWidget {
 }
 
 class _FormSave extends StatelessWidget {
-  const _FormSave({Key? key}) : super(key: key);
-
+  final _formkey = GlobalKey<FormState>();
+  final usuarioController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       child: Form(
+        key: _formkey,
         child: Column(
           children: <Widget>[
             TextFormField(
-              decoration: InputDecoration(
+              controller: usuarioController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Ingrese el Usuario";
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                labelText: "User",
+                labelText: "Usuario",
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
-              decoration: InputDecoration(
+              controller: passwordController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Ingrese el Password";
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                labelText: "Pass",
+                labelText: "Contraseña",
               ),
             ),
+            OutlinedButton(
+              child: const Text("Guardar"),
+              onPressed: () {
+                if (_formkey.currentState!.validate()) {
+                  print("guardado " + usuarioController.text);
+
+                  Conect.insert(Datos(
+                    Random().nextInt(100),
+                    user: usuarioController.text,
+                    pass: passwordController.text,
+                  ));
+                }
+              },
+            )
           ],
         ),
       ),

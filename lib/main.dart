@@ -3,7 +3,7 @@ import 'package:pass/pages/list_page.dart';
 import 'package:pass/pages/save_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -12,10 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: ListPage.route,
       routes: {
-        ListPage.route: (_) => ListPage(),
-        SavePage.route: (_) => SavePage()
+        ListPage.route: (_) => const ListPage(),
+        SavePage.route: (_) => const SavePage()
       },
     );
   }
